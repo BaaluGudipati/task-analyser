@@ -267,5 +267,5 @@ This project delivers a powerful, well‑tested task‑prioritization engine wit
 
 ---
 
-If you'd like, I can add **shields badges**, **screenshots section**, **demo GIF**, or **installation diagram**.
+
 
