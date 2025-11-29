@@ -1,84 +1,144 @@
-# Clone and navigate
+# 🧠 Task Analyzer
+
+A smart priority management tool that analyzes tasks using a multi‑factor scoring algorithm with support for urgency, importance, effort, dependencies, and multiple strategy modes.
+
+---
+
+## 🚀 Quick Start
+
+### **1. Clone and Navigate**
+
+```bash
 cd task-analyzer
+```
 
-# Setup environment
+### **2. Setup Virtual Environment**
+
+```bash
 python -m venv venv
-venv\Scripts\activate          
-source venv/bin/activate      
+# Windowsenv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+```
 
-# Install dependencies
+### **3. Install Dependencies**
+
+```bash
 pip install -r requirements.txt
+```
 
-# Initialize database
+### **4. Initialize Database**
+
+```bash
 python manage.py migrate
+```
 
-# Run tests (should see 10 passing)
+### **5. Run Tests (10 Passing)**
+
+```bash
 python manage.py test tasks
+```
 
-# Start backend
+### **6. Start Backend**
+
+```bash
 python manage.py runserver
+```
 
-# Open frontend
-# Open frontend/index.html in browser
+Backend → **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
 
+### **7. Open Frontend**
 
-Backend: http://127.0.0.1:8000
-Frontend:http://localhost:8080 
+Open `frontend/index.html` in your browser.
+Frontend → **[http://localhost:8080](http://localhost:8080)**
 
+---
 
- Algorithm Explanation
-Core Philosophy
-The scoring system balances four competing factors to identify what to work on first:
-1. Urgency (0-100+ points)
+# 🔍 Algorithm Overview
 
-Overdue tasks: 100 + (days_overdue ^ 1.5) - exponential pressure
-Due today: 95 points
-Due in 2 days: 80 points
-Due within week: 50 points
+The scoring engine evaluates tasks using **4 core factors**:
 
-Why exponential? Overdue work compounds risk. Linear scoring allows indefinite postponement.
-2. Importance (8-80 points)
+## **1. Urgency (0–100+)**
 
-User rating (1-10) × 8
-Heavy weighting respects user domain knowledge
+* Overdue → `100 + (days_overdue ^ 1.5)`
+* Due today → 95
+* Due in 2 days → 80
+* Due within week → 50
 
-3. Effort Bonus (Quick Wins)
+**Why exponential?**
+Overdue work compounds risk; linear urgency allowed harmful procrastination.
 
-≤1 hour: +25 points
-≤2 hours: +15 points
-Psychological benefit of completion momentum
+## **2. Importance (8–80)**
 
-4. Dependency Multiplier
+`importance_rating (1–10) × 8`
 
-+20 points per blocked task
-Unblocking others has cascading impact
+Respects user domain knowledge.
 
-Formula
+## **3. Effort Bonus (Quick Wins)**
+
+* ≤1 hr → +25
+* ≤2 hr → +15
+
+Boosts momentum.
+
+## **4. Dependency Multiplier**
+
+`+20 per task unblocked`
+
+Unblocking creates high downstream impact.
+
+---
+
+# 📘 Formula
+
+```text
 Final Score = Urgency + Importance + Effort Bonus + (Blocking Count × 20)
-Four Strategies
-StrategyBest ForAlgorithmSmart BalanceGeneral useAll 4 factors weightedFastest WinsBuilding momentumHeavily weights effort (×10)High ImpactStrategic workImportance × 15Deadline DrivenCrisis modeUrgency × 2, ignores effort
+```
 
-Architecture 
+---
+
+# 🎯 Strategy Modes
+
+| Strategy            | Best For          | Algorithm            |
+| ------------------- | ----------------- | -------------------- |
+| **Smart Balance**   | General use       | All factors weighted |
+| **Fastest Wins**    | Momentum building | Effort × 10          |
+| **High Impact**     | Strategic work    | Importance × 15      |
+| **Deadline Driven** | Crisis mode       | Urgency × 2          |
+
+---
+
+# 🏗 Architecture
+
+```
 task-analyzer/
-├── backend/                 # Django project
-│   ├── settings.py         # Config (CORS, apps)
-│   └── urls.py             # Main routing
-├── tasks/                   # Core application
-│   ├── models.py           # Task data structure
-│   ├── scoring.py          # Algorithm brain 
-│   ├── views.py            # API endpoints
-│   ├── serializers.py      # Validation
-│   └── tests.py            # 10 unit tests
-├── frontend/                # UI
-│   ├── index.html          # Structure
-│   ├── styles.css          # Modern dark theme
-│   └── script.js           # API integration
-└── db.sqlite3              # Database (stateless)
+├── backend/              # Django project
+│   ├── settings.py
+│   └── urls.py
+├── tasks/                # Core logic
+│   ├── models.py
+│   ├── scoring.py
+│   ├── views.py
+│   ├── serializers.py
+│   └── tests.py
+├── frontend/
+│   ├── index.html
+│   ├── styles.css
+│   └── script.js
+└── db.sqlite3
+```
 
- API Documentation
-POST /api/tasks/analyze/
-Analyze and sort all tasks by priority.
-Request:
+---
+
+# 📡 API Documentation
+
+## **POST /api/tasks/analyze/**
+
+Sorts all tasks by priority.
+
+### Request
+
+```json
 {
   "tasks": [
     {
@@ -92,92 +152,119 @@ Request:
   ],
   "strategy": "smart_balance"
 }
-Response:
+```
+
+### Response
+
+```json
 {
   "tasks": [
     {
       "id": 1,
       "priority_score": 167.0,
-      "explanation": "⏰ Due in 1 days | 💎 Importance: 9/10 | ✨ Fast task",
-      ...
+      "explanation": "⏰ Due in 1 days | 💎 Importance: 9/10 | ✨ Fast task"
     }
   ],
-}
   "strategy_used": "smart_balance",
   "total_tasks": 1
+}
+```
 
-POST /api/tasks/suggest/
-Get top 3 recommended tasks with detailed explanations.
-Response includes: Rank, task details, score, reasoning, and actionable recommendation.
+---
 
-Testing
-Run All Tests
-bashpython manage.py test tasks
+## **POST /api/tasks/suggest/**
 
+Returns **top 3 highest‑priority tasks** with reasoning.
 
- Design Decisions:
-1. Stateless API
-Decision: Process tasks in-memory, no database persistence
-Rationale: Assignment focuses on algorithm quality, not CRUD operations. Keeps code simple and testable.
-2. Exponential Urgency
-Decision: days_overdue ^ 1.5 instead of linear
-Rationale: Tested with sample data. Linear allowed procrastination. Exponential creates appropriate pressure without overwhelming other factors.
-3. Multiple Strategies
-Decision: 4 distinct algorithms vs. one configurable
-Rationale: Different contexts need different logic. A founder and student have different optimal strategies. User testing showed people want presets, not sliders.
-4. Dependency Detection (DFS)
-Decision: Depth-first search for circular dependencies
-Rationale: Circular deps break the system. O(V+E) complexity acceptable for task lists. Surfacing early prevents user confusion.
-5. REST over GraphQL
-Decision: Django REST Framework
-Rationale: Simpler, faster implementation. GraphQL overkill for 2-endpoint API. Assignment time-boxed to 4 hours.
+---
 
- Time Breakdown
-PhaseTimeDetailsSetup20minVirtual env, Django, foldersAlgorithm90minCore scoring + 4 strategiesAPI40minViews, serializers, URLsTesting45min10 comprehensive testsFrontend120minHTML, CSS (dark theme), JSDocumentation30minREADME, code commentsBug fixes25minEdge cases, CORS, dependenciesTotal6h 10min(including extra polish)
+# 🧪 Testing
 
- Features Implemented
-Core Requirements:
- Task model with all fields
- Smart scoring algorithm
- /analyze/ endpoint (sort all)
- /suggest/ endpoint (top 3)
- Past due date handling
- Missing/invalid data validation
- Circular dependency detection
- Configurable strategies
- 10+ unit tests
+Run all tests:
 
-Frontend:
- Form input + JSON bulk input
- Strategy selector with live descriptions
- Color-coded priority (High/Medium/Low)
- Explanations for each score
- Error handling & loading states
- Responsive design
+```bash
+python manage.py test tasks
+```
 
-Bonus:
- 4 distinct strategies (not just config)
-Circular dependency detection (DFS)
- Modern dark-themed UI
- Real-time task preview
- Human-readable explanations
+Includes:
 
+* Circular dependency detection
+* Strategy scoring validation
+* Edge cases
 
+---
 
- Known Limitations
-No authentication - Stateless API, no user management
-In-memory only - Tasks not persisted to database
-Single user - No collaboration features
-Basic validation - Doesn't check if dependency IDs exist
-No timezone handling - Uses server local time
+# 🧩 Design Decisions
 
-All acceptable for prototype scope.
- Requirements Met
-RequirementStatusEvidenceAlgorithm Design (40%)4 strategies, exponential urgency, multi-factorCode Quality (30%)Separated concerns, docstrings, error handlingCritical Thinking (20%)Edge cases, circular deps, validationFrontend (10%)Functional UI, strategy selector, responsiveUnit Tests9 tests, all passingDocumentationComprehensive README, code comments
+### ✔ Stateless API
 
- Tech Stack
-Backend: Python 3.10, Django 4.2.7, Django REST Framework 3.14
-Frontend: HTML5, CSS3, Vanilla JavaScript (no frameworks)
-Database: SQLite (default Django)
-Testing: Django TestCase
-Version Control: Git
+No DB persistence; focused on algorithm performance.
+
+### ✔ Exponential Urgency
+
+Best prevents procrastination based on test data.
+
+### ✔ Multiple Strategies
+
+Users prefer preset modes instead of custom sliders.
+
+### ✔ Dependency Detection (DFS)
+
+O(V+E) complexity, fast and reliable.
+
+---
+
+# 🕒 Time Breakdown
+
+| Phase         | Time       |
+| ------------- | ---------- |
+| Setup         | 20m        |
+| Algorithm     | 90m        |
+| API           | 40m        |
+| Testing       | 45m        |
+| Frontend      | 120m       |
+| Documentation | 30m        |
+| Bug fixes     | 25m        |
+| **Total**     | **6h 10m** |
+
+---
+
+# 🛠 Tech Stack
+
+**Backend:** Django, DRF
+**Frontend:** HTML, CSS, JS
+**Database:** SQLite
+**Testing:** Django TestCase
+**Version Control:** Git
+
+---
+
+# ✅ Features
+
+* Smart scoring system
+* 4 strategy modes
+* /analyze & /suggest API endpoints
+* Circular dependency detection
+* Responsive dark‑theme frontend
+* 10+ unit tests
+* Detailed explanations for each task
+
+---
+
+# ⚠ Known Limitations
+
+* No authentication
+* In‑memory only
+* Single‑user
+* Minimal validation
+* No timezone support
+
+---
+
+# ⭐ Summary
+
+This project delivers a powerful, well‑tested task‑prioritization engine with a clean REST API and intuitive UI—ideal for productivity, planning, or decision‑support applications.
+
+---
+
+If you'd like, I can add **shields badges**, **screenshots section**, **demo GIF**, or **installation diagram**.
