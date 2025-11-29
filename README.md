@@ -1,10 +1,10 @@
-# 🧠 Task Analyzer
+# Task Analyzer
 
 A smart priority management tool that analyzes tasks using a multi‑factor scoring algorithm with support for urgency, importance, effort, dependencies, and multiple strategy modes.
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### **1. Clone and Navigate**
 
@@ -54,7 +54,7 @@ Frontend → **[http://localhost:8080](http://localhost:8080)**
 
 ---
 
-# 🔍 Algorithm Overview
+#  Algorithm Overview
 
 The scoring engine evaluates tasks using **4 core factors**:
 
@@ -89,7 +89,7 @@ Unblocking creates high downstream impact.
 
 ---
 
-# 📘 Formula
+#  Formula
 
 ```text
 Final Score = Urgency + Importance + Effort Bonus + (Blocking Count × 20)
@@ -97,7 +97,7 @@ Final Score = Urgency + Importance + Effort Bonus + (Blocking Count × 20)
 
 ---
 
-# 🎯 Strategy Modes
+#  Strategy Modes
 
 | Strategy            | Best For          | Algorithm            |
 | ------------------- | ----------------- | -------------------- |
@@ -108,7 +108,7 @@ Final Score = Urgency + Importance + Effort Bonus + (Blocking Count × 20)
 
 ---
 
-# 🏗 Architecture
+# Architecture
 
 ```
 task-analyzer/
@@ -130,7 +130,7 @@ task-analyzer/
 
 ---
 
-# 📡 API Documentation
+#  API Documentation
 
 ## **POST /api/tasks/analyze/**
 
@@ -162,7 +162,7 @@ Sorts all tasks by priority.
     {
       "id": 1,
       "priority_score": 167.0,
-      "explanation": "⏰ Due in 1 days | 💎 Importance: 9/10 | ✨ Fast task"
+      "explanation": " Due in 1 days |  Importance: 9/10 |  Fast task"
     }
   ],
   "strategy_used": "smart_balance",
@@ -178,7 +178,7 @@ Returns **top 3 highest‑priority tasks** with reasoning.
 
 ---
 
-# 🧪 Testing
+# Testing
 
 Run all tests:
 
@@ -194,27 +194,27 @@ Includes:
 
 ---
 
-# 🧩 Design Decisions
+#  Design Decisions
 
-### ✔ Stateless API
+###  Stateless API
 
 No DB persistence; focused on algorithm performance.
 
-### ✔ Exponential Urgency
+###  Exponential Urgency
 
 Best prevents procrastination based on test data.
 
-### ✔ Multiple Strategies
+###  Multiple Strategies
 
 Users prefer preset modes instead of custom sliders.
 
-### ✔ Dependency Detection (DFS)
+###  Dependency Detection (DFS)
 
 O(V+E) complexity, fast and reliable.
 
 ---
 
-# 🕒 Time Breakdown
+#  Time Breakdown
 
 | Phase         | Time       |
 | ------------- | ---------- |
@@ -229,7 +229,7 @@ O(V+E) complexity, fast and reliable.
 
 ---
 
-# 🛠 Tech Stack
+#  Tech Stack
 
 **Backend:** Django, DRF
 **Frontend:** HTML, CSS, JS
@@ -239,7 +239,7 @@ O(V+E) complexity, fast and reliable.
 
 ---
 
-# ✅ Features
+#  Features
 
 * Smart scoring system
 * 4 strategy modes
@@ -251,7 +251,7 @@ O(V+E) complexity, fast and reliable.
 
 ---
 
-# ⚠ Known Limitations
+#  Known Limitations
 
 * No authentication
 * In‑memory only
@@ -261,10 +261,11 @@ O(V+E) complexity, fast and reliable.
 
 ---
 
-# ⭐ Summary
+#  Summary
 
 This project delivers a powerful, well‑tested task‑prioritization engine with a clean REST API and intuitive UI—ideal for productivity, planning, or decision‑support applications.
 
 ---
 
 If you'd like, I can add **shields badges**, **screenshots section**, **demo GIF**, or **installation diagram**.
+
