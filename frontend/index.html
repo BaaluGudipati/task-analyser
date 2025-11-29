@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Task Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎯 Smart Task Analyzer</h1>
+            <p class="subtitle">Intelligent task prioritization powered by advanced algorithms</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2>📝 Input Tasks</h2>
+                
+                <!-- Strategy Selector -->
+                <div class="strategy-selector">
+                    <label for="strategy">Sorting Strategy:</label>
+                    <select id="strategy" class="strategy-dropdown">
+                        <option value="smart_balance">🧠 Smart Balance</option>
+                        <option value="fastest_wins">⚡ Fastest Wins</option>
+                        <option value="high_impact">💎 High Impact</option>
+                        <option value="deadline_driven">⏰ Deadline Driven</option>
+                    </select>
+                    <div class="strategy-description" id="strategyDescription">
+                        Balances all factors for optimal results
+                    </div>
+                </div>
+
+                <!-- Input Tabs -->
+                <div class="input-tabs">
+                    <button class="tab-btn active" onclick="switchTab('form')">Form Input</button>
+                    <button class="tab-btn" onclick="switchTab('json')">JSON Input</button>
+                </div>
+
+                <!-- Form Input -->
+                <div id="formInput" class="input-mode active">
+                    <form id="taskForm" class="task-form">
+                        <div class="form-group">
+                            <label for="taskTitle">Task Title *</label>
+                            <input type="text" id="taskTitle" placeholder="e.g., Fix login bug" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dueDate">Due Date *</label>
+                                <input type="date" id="dueDate" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="estimatedHours">Hours *</label>
+                                <input type="number" id="estimatedHours" min="1" placeholder="3" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="importance">Importance (1-10) *</label>
+                            <input type="range" id="importance" min="1" max="10" value="5">
+                            <span id="importanceValue" class="importance-value">5</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="dependencies">Dependencies (optional)</label>
+                            <input type="text" id="dependencies" placeholder="e.g., 1, 2, 3">
+                            <small>Comma-separated task IDs</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-secondary">Add Task</button>
+                    </form>
+
+                    <!-- Added Tasks Preview -->
+                    <div id="tasksList" class="tasks-list"></div>
+                </div>
+
+                <!-- JSON Input -->
+                <div id="jsonInput" class="input-mode">
+                    <textarea id="jsonTextarea" class="json-textarea" placeholder='[
+  {
+    "id": 1,
+    "title": "Fix critical bug",
+    "due_date": "2025-11-30",
+    "estimated_hours": 3,
+    "importance": 9,
+    "dependencies": []
+  },
+  {
+    "id": 2,
+    "title": "Write documentation",
+    "due_date": "2025-12-05",
+    "estimated_hours": 2,
+    "importance": 5,
+    "dependencies": [1]
+  }
+]'></textarea>
+                    <small>Paste your tasks in JSON format</small>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="analyzeBtn" class="btn btn-primary">🔍 Analyze Tasks</button>
+                    <button id="suggestBtn" class="btn btn-accent">✨ Get Top 3 Suggestions</button>
+                    <button id="clearBtn" class="btn btn-secondary">🗑️ Clear All</button>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="output-section">
+                <h2>📊 Analysis Results</h2>
+                
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-state hidden">
+                    <div class="spinner"></div>
+                    <p>Analyzing tasks...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="errorState" class="error-state hidden">
+                    <div class="error-icon">⚠️</div>
+                    <p id="errorMessage"></p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <p>No tasks analyzed yet</p>
+                    <small>Add some tasks and click "Analyze Tasks" to get started</small>
+                </div>
+
+                <!-- Results Container -->
+                <div id="resultsContainer" class="results-container hidden">
+                    <!-- Strategy Info -->
+                    <div id="strategyInfo" class="strategy-info"></div>
+                    
+                    <!-- Warnings -->
+                    <div id="warningsContainer" class="warnings-container hidden"></div>
+                    
+                    <!-- Tasks Grid -->
+                    <div id="tasksGrid" class="tasks-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
