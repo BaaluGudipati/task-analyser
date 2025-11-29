@@ -18,3 +18,7 @@ env/
 # System files
 .DS_Store
 Thumbs.db
+
+#
+name:Baalu
+password:@Baalu
